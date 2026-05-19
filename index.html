@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrunoJato | Agendamento Premium</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="nav">
+      <div class="brand">
+        <img src="file:///C:/Users/SERVIDOR/.gemini/antigravity/brain/04baceca-8027-493b-8f93-f3a5819b8608/brunojato_logo_1779161059239.png" alt="BrunoJato Logo" class="logo-img">
+        <span>BrunoJato</span>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-ghost" onclick="app.trocarTela('cliente')">Área do cliente</button>
+        <button class="btn-outline" onclick="app.trocarTela('admin')">Painel ADM</button>
+        <a class="btn-neon" href="https://wa.me/5594991014378" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="badge-premium">Experiência Premium</div>
+        <h1>Estética Automotiva de Alto Padrão.</h1>
+        <p>Agende seu horário com praticidade. Nossa equipe cuidará do seu veículo com os melhores produtos e atenção aos detalhes.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="app.trocarTela('cliente')">Agendar Agora</button>
+          <button class="btn-ghost" onclick="app.rolarServicos()">Ver Serviços</button>
+        </div>
+      </div>
+      
+      <div class="hero-glass-card">
+        <h3>Como Funciona</h3>
+        <ul class="steps-list">
+          <li><span>1</span> Escolha o serviço, data e hora.</li>
+          <li><span>2</span> Pague 50% de sinal via Pix.</li>
+          <li><span>3</span> Envie o comprovante no WhatsApp.</li>
+          <li><span>4</span> Aguarde a aprovação manual.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN APP -->
+  <main class="main-container">
+    <div class="tabs-container">
+      <div class="tabs">
+        <button id="tabCliente" class="tab active" onclick="app.trocarTela('cliente')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Área do Cliente
+        </button>
+        <button id="tabAdmin" class="tab" onclick="app.trocarTela('admin')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          Painel ADM
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW CLIENTE -->
+    <section id="viewCliente" class="view active fade-in">
+      <div class="grid">
+        <!-- FORMULÁRIO -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <h2>Solicitar Agendamento</h2>
+            <p>Preencha seus dados para reservar o horário.</p>
+          </div>
+
+          <div class="alert-box">
+            <strong>Atenção:</strong> A reserva só é aprovada após envio e conferência do comprovante (50%).
+          </div>
+
+          <form id="formAgendamento" onsubmit="app.criarAgendamento(event)">
+            <div class="form-row">
+              <div class="input-group">
+                <input id="nome" required placeholder=" " />
+                <label>Nome Completo</label>
+              </div>
+              <div class="input-group">
+                <input id="whatsapp" required placeholder=" " />
+                <label>WhatsApp</label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="input-group">
+                <select id="tipoVeiculo" required>
+                  <option value="" disabled selected hidden></option>
+                  <option>Carro pequeno</option>
+                  <option>Sedan</option>
+                  <option>SUV/Caminhonete</option>
+                  <option>Moto</option>
+                </select>
+                <label class="active-label">Tipo de Veículo</label>
+              </div>
+              <div class="input-group">
+                <input id="veiculo" required placeholder=" " />
+                <label>Modelo / Placa</label>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <select id="servico" required onchange="app.atualizarResumo()">
+              </select>
+              <label class="active-label">Serviço Desejado</label>
+            </div>
+
+            <div class="form-row">
+              <div class="input-group">
+                <input id="data" type="date" required />
+                <label class="active-label">Data</label>
+              </div>
+              <div class="input-group">
+                <select id="hora" required>
+                  <option value="" disabled selected hidden></option>
+                  <option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option>
+                  <option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option>
+                </select>
+                <label class="active-label">Horário</label>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <select id="pagamento" required>
+                <option value="Pix" selected>Pix (Recomendado)</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Cartão">Cartão</option>
+              </select>
+              <label class="active-label">Forma de Pagamento (Sinal)</label>
+            </div>
+
+            <div class="input-group">
+              <textarea id="observacoes" placeholder=" "></textarea>
+              <label>Observações Adicionais</label>
+            </div>
+
+            <div class="summary-box" id="resumoValor">
+              <span class="muted">Selecione um serviço para calcular os valores.</span>
+            </div>
+
+            <button class="btn-primary w-100 mt-2" type="submit">
+              Solicitar e Abrir WhatsApp
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- LISTA DE SERVIÇOS -->
+        <div class="glass-panel" id="servicosBox">
+          <div class="panel-header">
+            <h2>Nossos Serviços</h2>
+            <p>Tratamento premium para seu veículo.</p>
+          </div>
+          <div class="service-list" id="listaServicos"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW ADMIN -->
+    <section id="viewAdmin" class="view fade-in">
+      <div id="loginAdmin" class="glass-panel admin-login">
+        <div class="login-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </div>
+        <h2>Acesso Restrito</h2>
+        <p>Área exclusiva para administração.</p>
+        
+        <div class="input-group mt-3">
+          <input id="senhaAdmin" type="password" placeholder=" " onkeypress="if(event.key === 'Enter') app.entrarAdmin()" />
+          <label>Senha Administrativa</label>
+        </div>
+        
+        <button class="btn-primary w-100" onclick="app.entrarAdmin()">Acessar Painel</button>
+        <p class="text-center mt-2" style="font-size: 13px; color: var(--text-muted)">Senha padrão: 1234</p>
+      </div>
+
+      <div id="dashboardAdmin" style="display:none;">
+        <div class="admin-stats">
+          <div class="stat-card">
+            <div class="stat-icon" style="color: var(--primary); background: rgba(0,210,255,0.1)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <div>
+              <div class="stat-label">Total de Agendamentos</div>
+              <strong id="statTotal">0</strong>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: var(--warning); background: rgba(255,171,0,0.1)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div>
+              <div class="stat-label">Pendentes</div>
+              <strong id="statPendentes">0</strong>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: var(--success); background: rgba(0,227,150,0.1)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <div>
+              <div class="stat-label">Aprovados</div>
+              <strong id="statAprovados">0</strong>
+            </div>
+          </div>
+          <div class="stat-card highlight">
+            <div class="stat-icon" style="color: #fff; background: rgba(255,255,255,0.2)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div>
+              <div class="stat-label" style="color: rgba(255,255,255,0.8)">A Receber (Restante)</div>
+              <strong id="statReceber" style="color: white">R$ 0,00</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel">
+          <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h2>Gestão de Agendamentos</h2>
+              <p>Controle geral dos serviços.</p>
+            </div>
+            <button class="btn-outline" onclick="app.exportarCSV()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Exportar CSV
+            </button>
+          </div>
+
+          <div class="filters-bar">
+            <div class="input-group">
+              <input id="busca" placeholder=" " oninput="app.renderAdmin()" />
+              <label>Buscar cliente, placa, WhatsApp...</label>
+            </div>
+            <div class="input-group">
+              <select id="filtroStatus" onchange="app.renderAdmin()">
+                <option value="todos" selected>Todos os status</option>
+                <option value="pendente">Pendentes</option>
+                <option value="aprovado">Aprovados</option>
+                <option value="concluido">Concluídos</option>
+                <option value="cancelado">Cancelados</option>
+              </select>
+              <label class="active-label">Filtrar por Status</label>
+            </div>
+            <div class="input-group">
+              <input id="filtroData" type="date" onchange="app.renderAdmin()" />
+              <label class="active-label">Data Específica</label>
+            </div>
+          </div>
+
+          <div id="listaAgendamentos" class="appointment-grid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>BrunoJato © Estética Automotiva Premium.</p>
+  </footer>
+
+  <div class="toast" id="toast">
+    <div class="toast-icon"></div>
+    <div class="toast-msg" id="toastMsg"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
