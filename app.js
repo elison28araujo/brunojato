@@ -112,6 +112,15 @@ const app = {
     const data = app.getEl("data").value;
     const hora = app.getEl("hora").value;
 
+    const dataHoraStr = `${data}T${hora}:00`;
+    const dataAgendamento = new Date(dataHoraStr);
+    const agora = new Date();
+    const diffHoras = (dataAgendamento - agora) / (1000 * 60 * 60);
+
+    if (diffHoras < 3) {
+      return app.toast("O agendamento requer antecedência mínima de 3 horas.", "error");
+    }
+
     if (!app.validarHorario(data, hora)) {
       return app.toast("Horário indisponível ou aguardando aprovação.", "error");
     }
@@ -274,6 +283,47 @@ const app = {
     a.download = "brunojato-export.csv";
     a.click();
     URL.revokeObjectURL(url);
+  },
+
+  abrirTermos: (e) => {
+    if(e) e.preventDefault();
+    app.getEl("modalTermos").classList.add("show");
+  },
+
+  fecharTermos: () => {
+    app.getEl("modalTermos").classList.remove("show");
+  },
+
+  imprimirTermos: () => {
+    const conteudo = app.getEl("termoPrintable").innerHTML;
+    const janelaPrint = window.open('', '', 'width=800,height=600');
+    janelaPrint.document.write(`
+      <html>
+        <head>
+          <title>Termos e Condições - BrunoJato</title>
+          <style>
+            body { font-family: 'Helvetica', 'Arial', sans-serif; line-height: 1.6; padding: 40px; color: #333; }
+            h3 { text-align: center; color: #000; text-transform: uppercase; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+            strong { color: #000; }
+            p { margin-bottom: 14px; text-align: justify; font-size: 14px; }
+            .assinatura { margin-top: 60px; text-align: center; }
+            .assinatura-linha { border-top: 1px solid #000; width: 300px; margin: 0 auto; padding-top: 5px; font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          ${conteudo}
+          <div class="assinatura">
+            <div class="assinatura-linha">Assinatura do Cliente</div>
+            <p>Data: ____/____/________</p>
+          </div>
+        </body>
+      </html>
+    `);
+    janelaPrint.document.close();
+    janelaPrint.focus();
+    setTimeout(() => {
+      janelaPrint.print();
+    }, 500);
   }
 };
 

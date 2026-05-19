@@ -22,7 +22,7 @@
   --radius: 16px;
   --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   
-  --hero-bg: url("file:///C:/Users/SERVIDOR/.gemini/antigravity/brain/04baceca-8027-493b-8f93-f3a5819b8608/brunojato_hero_1779161001817.png");
+  --hero-bg: linear-gradient(135deg, #0b101e 0%, #1a2642 100%);
 }
 
 * {
@@ -71,12 +71,18 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-.logo-img {
+.logo-box {
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  object-fit: cover;
-  box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 20px;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
 }
 
 .nav-actions {
@@ -632,3 +638,77 @@ select { appearance: none; }
   .hero { padding: 40px 16px; }
   .main-container { margin-top: -20px; }
 }
+
+/* CHECKBOX TERMOS */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  padding-left: 32px;
+}
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 22px;
+  width: 22px;
+  background-color: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  transition: var(--transition);
+}
+.checkbox-container:hover input ~ .checkmark { background-color: rgba(255,255,255,0.15); }
+.checkbox-container input:checked ~ .checkmark { background-color: var(--primary); border-color: var(--primary); }
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 7px; top: 3px;
+  width: 5px; height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.checkbox-container input:checked ~ .checkmark:after { display: block; }
+.link-termos { color: var(--primary); text-decoration: none; font-weight: 600; }
+.link-termos:hover { text-decoration: underline; }
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.modal.show { display: flex; opacity: 1; }
+.modal-content {
+  background: var(--bg-body);
+  max-width: 500px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-light);
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+}
+.modal.show .modal-content { transform: translateY(0); }
+.modal-body p { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.6; }
+.modal-body strong { color: #fff; }
