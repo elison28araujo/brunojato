@@ -179,6 +179,10 @@ const app = {
     app.salvarAgendamentos(lista);
     app.renderAdmin();
     app.toast(`Status atualizado: ${status}`, "success");
+    
+    if (status === "aprovado") {
+      app.chamarCliente(id);
+    }
   },
 
   chamarCliente: id => {

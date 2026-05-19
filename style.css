@@ -394,6 +394,7 @@ textarea:not(:placeholder-shown) ~ label,
 }
 
 select { appearance: none; }
+option { background: var(--bg-body); color: #fff; }
 
 .alert-box {
   background: rgba(255, 171, 0, 0.1);
@@ -640,7 +641,7 @@ select { appearance: none; }
 }
 
 /* CHECKBOX TERMOS */
-.checkbox-container {
+.input-group label.checkbox-container, .checkbox-container {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -649,6 +650,10 @@ select { appearance: none; }
   cursor: pointer;
   position: relative;
   padding-left: 32px;
+  pointer-events: auto;
+  top: auto;
+  left: auto;
+  background: transparent;
 }
 .checkbox-container input {
   position: absolute;
