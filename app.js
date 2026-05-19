@@ -93,7 +93,7 @@ const app = {
     app.getEl("resumoValor").innerHTML = `
       <div class="summary-line"><span>Serviço</span><strong>${s.nome}</strong></div>
       <div class="summary-line"><span>Valor Total</span><strong>${app.moeda(s.preco)}</strong></div>
-      <div class="summary-line"><span>Sinal (50%)</span><strong>${app.moeda(entrada)}</strong></div>
+      <div class="summary-line"><span>Adiantamento (50%)</span><strong>${app.moeda(entrada)}</strong></div>
       <div class="summary-line summary-highlight"><span>Restante na entrega</span><strong>${app.moeda(restante)}</strong></div>
     `;
   },
@@ -150,8 +150,8 @@ const app = {
     const texto = `Olá, BrunoJato! Quero confirmar uma solicitação de agendamento.%0A%0A` +
       `👤 *Cliente:* ${agendamento.nome}%0A📱 *WhatsApp:* ${agendamento.whatsapp}%0A🚗 *Veículo:* ${agendamento.tipoVeiculo} - ${agendamento.veiculo}%0A` +
       `✨ *Serviço:* ${agendamento.servico}%0A📅 *Data/Hora:* ${agendamento.data.split('-').reverse().join('/')} às ${agendamento.hora}%0A` +
-      `💰 *Valor Total:* ${app.moeda(agendamento.preco)}%0A💵 *Sinal (50%):* ${app.moeda(agendamento.entrada)}%0A` +
-      `💳 *Previsto:* ${agendamento.pagamento}%0A📝 *Obs:* ${agendamento.observacoes || "Nenhuma"}%0A%0A_Vou enviar o comprovante do sinal logo abaixo._`;
+      `💰 *Valor Total:* ${app.moeda(agendamento.preco)}%0A💵 *Adiantamento (50%):* ${app.moeda(agendamento.entrada)}%0A` +
+      `💳 *Previsto:* ${agendamento.pagamento}%0A📝 *Obs:* ${agendamento.observacoes || "Nenhuma"}%0A%0A_Vou enviar o comprovante do adiantamento logo abaixo._`;
 
     window.open(`https://wa.me/${CONFIG.whatsappDono}?text=${texto}`, "_blank");
     app.getEl("formAgendamento").reset();
@@ -197,7 +197,7 @@ const app = {
     } else if (a.status === "cancelado") {
       texto = `Olá ${a.nome}. Seu agendamento no BrunoJato foi cancelado.%0AEntre em contato para reagendar.`;
     } else {
-      texto = `Olá ${a.nome}! Recebemos sua solicitação no BrunoJato.%0A%0APara aprovar o agendamento, aguardamos o comprovante do sinal de ${app.moeda(a.entrada)}.%0A📅 ${a.data.split('-').reverse().join('/')} às ${a.hora}.`;
+      texto = `Olá ${a.nome}! Recebemos sua solicitação no BrunoJato.%0A%0APara aprovar o agendamento, aguardamos o comprovante do adiantamento de ${app.moeda(a.entrada)}.%0A📅 ${a.data.split('-').reverse().join('/')} às ${a.hora}.`;
     }
     
     window.open(`https://wa.me/${numero}?text=${texto}`, "_blank");
@@ -233,6 +233,18 @@ const app = {
       app.getEl("statPendentes").textContent = pendentes;
       app.getEl("statAprovados").textContent = aprovados;
       app.getEl("statReceber").textContent = app.moeda(receber);
+    }
+
+    const agendamentosValidos = lista.filter(a => a.status === "aprovado" || a.status === "concluido");
+    const faturamentoTotal = agendamentosValidos.reduce((s,a) => s + Number(a.preco), 0);
+    const caixaAprovados = lista.filter(a => a.status === "aprovado").reduce((s,a) => s + Number(a.entrada), 0);
+    const caixaConcluidos = lista.filter(a => a.status === "concluido").reduce((s,a) => s + Number(a.preco), 0);
+    const totalCaixa = caixaAprovados + caixaConcluidos;
+
+    if (app.getEl("finTotal")) {
+      app.getEl("finTotal").textContent = app.moeda(faturamentoTotal);
+      app.getEl("finCaixa").textContent = app.moeda(totalCaixa);
+      app.getEl("finReceber").textContent = app.moeda(receber);
     }
 
     const container = app.getEl("listaAgendamentos");
